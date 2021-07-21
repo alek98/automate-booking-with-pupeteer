@@ -2,22 +2,57 @@ const puppeteer = require('puppeteer')
 const config = require('./config.js')
 
 let browser, page, navigationPromise;
-main();
+
+main()
 
 async function main() {
-  browser = await puppeteer.launch({ headless: false, slowMo: 50 })
-  // browser = await puppeteer.launch({ headless: true})
+  const bookFunction = book;
+  await tryToBook(bookFunction, endTimeInSeconds=10);
+}
+
+
+async function tryToBook(myFunction, endTimeInSeconds) {
+  const endTime = new Date().getTime() + endTimeInSeconds * 1000
+  await _tryToBook(myFunction, endTime);
+}
+
+async function _tryToBook(myFunction, endTime) {
+  try {
+    await myFunction();
+    console.log('done successfully')
+  } catch (error) {
+    console.log('failed. Trying again.')
+    console.log(error);
+
+    let currentTime = new Date().getTime();
+
+    let timeout = setTimeout(async () => {
+      
+      // check if time is up
+      if (currentTime >= endTime) clearTimeout(timeout)
+
+      // if time is not up & function failed, call recursive function
+      else await _tryToBook(myFunction, endTime)
+    }, 2000);
+  }
+  finally{
+    console.log('closing browser');
+    await browser.close()
+  }
+}
+
+async function book() {
+  browser = await puppeteer.launch({ headless: false, slowMo: 100 })
+  // browser = await puppeteer.launch({ headless: true })
   page = await browser.newPage()
   navigationPromise = page.waitForNavigation()
   await init()
   await login()
   await chooseLocation()
   await chooseDate()
-  await chooseProgram('bodypump')
-  await confirmBooking()
-
-  // TODO: uncomment close function for production
-  // await browser.close()
+  await chooseProgram()
+  // TODO: uncomment function for production
+  // await confirmBooking()
 }
 
 async function init() {
@@ -32,6 +67,8 @@ async function login() {
 
   await navigationPromise
 
+  await page.waitForSelector('.col-md-6 #loginpers')
+  await page.waitForSelector('.col-md-6 #loginpass')
   await page.type('.col-md-6 #loginpers', config.env.PERSON)
   await page.type('.col-md-6 #loginpass', config.env.PASSWORD)
 
@@ -69,12 +106,12 @@ async function chooseDate() {
   await navigationPromise
 }
 
-async function chooseProgram(programName) {
+async function chooseProgram() {
+  const programName = config.env.PROGRAM 
   await page.waitForSelector('.table-responsive .card-body .row')
   let programs = await page.$$('.table-responsive .card-body .row')
-  console.log(programs.length)
 
-  for(let i = 0; i < programs.length; i++ ) {
+  for (let i = 0; i < programs.length; i++) {
 
     let time = await programs[i].$('.nobr')
     time = await time.getProperty('innerHTML')
@@ -87,8 +124,9 @@ async function chooseProgram(programName) {
     let description2 = await (await (await programs[i].$$('.booking-info-link'))[2].getProperty('innerText')).jsonValue();
     let description = `${description1} - ${description2}`
 
-    let data = { time, name, description}
+    let data = { time, name, description }
 
+    // find program by name
     if (data.name.toLowerCase().includes(programName)) {
       const button = await programs[i].$('.col-4 .btn')
       await button.click()
