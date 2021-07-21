@@ -369,12 +369,14 @@ let browser, page, navigationPromise;
 main();
 
 async function main() {
-  // browser = await puppeteer.launch({ headless: false, slowMo: 50 })
+  browser = await puppeteer.launch({ headless: false, slowMo: 50 })
   browser = await puppeteer.launch({ headless: true })
   page = await browser.newPage()
   navigationPromise = page.waitForNavigation()
   await init()
-  await chooseProgram()
+
+  const programName = 'bodypump'
+  await chooseProgram(programName)
 
   await browser.close()
 }
@@ -385,48 +387,51 @@ async function init() {
   await navigationPromise
 }
 
-async function chooseProgram() {
-  let programs = await page.$$('.table-responsive .card-body')
+async function chooseProgram(programName) {
+  await page.waitForSelector('.table-responsive .card-body .row')
+  let programs = await page.$$('.table-responsive .card-body .row')
   console.log(programs.length)
 
-  let programsInfo = await Promise.all(programs.map(async program => await program.$('.col-8')))
-  programsInfo = programsInfo.filter(programInfo => programInfo) // remove null values
+  for(let i = 0; i < programs.length; i++ ) {
 
-  // easier for debugging but I have to return data, so map function is actually used on 414. line
-  // for(let i = 0; i < programsInfo.length; i++ ) {
+    let time = await programs[i].$('.nobr')
+    time = await time.getProperty('innerHTML')
+    time = await time.jsonValue()
 
-  //   let time = await programs[i].$('.nobr')
-  //   time = await time.getProperty('innerHTML')
-  //   time = await time.jsonValue()
+    // shorthand zapis
+    let name = await (await (await programs[i].$('.booking-info-link.bold')).getProperty('innerText')).jsonValue();
 
-  //   // shorthand zapis
-  //   let name = await (await (await programs[i].$('.booking-info-link.bold')).getProperty('innerText')).jsonValue();
+    let description1 = await (await (await programs[i].$$('.booking-info-link'))[1].getProperty('innerText')).jsonValue();
+    let description2 = await (await (await programs[i].$$('.booking-info-link'))[2].getProperty('innerText')).jsonValue();
+    let description = `${description1} - ${description2}`
 
-  //   let description1 = await (await (await programs[i].$$('.booking-info-link'))[1].getProperty('innerText')).jsonValue();
-  //   let description2 = await (await (await programs[i].$$('.booking-info-link'))[2].getProperty('innerText')).jsonValue();
-  //   let description = `${description1} - ${description2}`
+    let data = { time, name, description}
 
-  //   let data = { time, name, description}
-  //   console.log(data);
-
-  // }
-
-  const infoData = await Promise.all(programsInfo.map(async program => {
+    if (data.name.toLowerCase().includes(programName)) {
+      const button = await programs[i].$('.col-4 .btn')
+      await button.click()
+      break
+    }
+  }
+  await navigationPromise
+  
+  /*
+  // create data
+  const infoData = await Promise.all(programs.map(async program => {
 
     let time = await program.$('.nobr')
     time = await time.getProperty('innerHTML')
     time = await time.jsonValue()
 
     // shorthand zapis
-    let name = await(await(await program.$('.booking-info-link.bold')).getProperty('innerText')).jsonValue();
+    let name = await (await (await program.$('.booking-info-link.bold')).getProperty('innerText')).jsonValue();
 
-    let description1 = await(await(await program.$$('.booking-info-link'))[1].getProperty('innerText')).jsonValue();
-    let description2 = await(await(await program.$$('.booking-info-link'))[2].getProperty('innerText')).jsonValue();
+    let description1 = await (await (await program.$$('.booking-info-link'))[1].getProperty('innerText')).jsonValue();
+    let description2 = await (await (await program.$$('.booking-info-link'))[2].getProperty('innerText')).jsonValue();
     let description = `${description1} - ${description2}`
 
     let data = { time, name, description }
     return data;
   }))
-
-  let a;
+  */
 }

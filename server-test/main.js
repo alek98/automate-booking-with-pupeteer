@@ -5,19 +5,19 @@ let browser, page, navigationPromise;
 main();
 
 async function main() {
-  // browser = await puppeteer.launch({ headless: false, slowMo: 50 })
-  browser = await puppeteer.launch({ headless: true})
+  browser = await puppeteer.launch({ headless: false, slowMo: 50 })
+  // browser = await puppeteer.launch({ headless: true})
   page = await browser.newPage()
   navigationPromise = page.waitForNavigation()
   await init()
-  // TODO: uncomment login function for production
-  // login()
+  await login()
   await chooseLocation()
   await chooseDate()
-  // await chooseProgram()
+  await chooseProgram('bodypump')
+  await confirmBooking()
 
   // TODO: uncomment close function for production
-  await browser.close()
+  // await browser.close()
 }
 
 async function init() {
@@ -69,32 +69,37 @@ async function chooseDate() {
   await navigationPromise
 }
 
-async function chooseProgram() {
-  const PROGRAM = 'bodypump';
-  await page.waitForSelector('.table-responsive > .card:nth-child(2) > .card-body > .row > .col-8')
+async function chooseProgram(programName) {
+  await page.waitForSelector('.table-responsive .card-body .row')
+  let programs = await page.$$('.table-responsive .card-body .row')
+  console.log(programs.length)
 
-  // https://github.com/puppeteer/puppeteer/blob/v10.1.0/docs/api.md#pageselector-1
-  const programs = await page.$$('.table-responsive .card-body');
-  // programs.forEach(async program => {
-  //   const dataElem = await page.$('col-8');
+  for(let i = 0; i < programs.length; i++ ) {
 
-  // })
+    let time = await programs[i].$('.nobr')
+    time = await time.getProperty('innerHTML')
+    time = await time.jsonValue()
 
-  // https://stackoverflow.com/questions/49236981/want-to-scrape-table-using-puppeteer-how-can-i-get-all-rows-iterate-through-ro
-  const data = await page.evaluate(() => {
-    const programs = document.querySelectorAll('.table-responsive .card-body')
-    return programs;
-    // programs.forEach(program => {
-    //   const dataElem = program.querySelector('col-8');
-    //   const data = {
-    //     'time': undefined, 
-    //     'name': undefined, 
-    //     'description': undefined
-    //   }
-    //   data.time = dataElem.childNodes[0];
-    //   data.name = ataElem.childNodes[1];
-    // })
-  })
+    // shorthand writing
+    let name = await (await (await programs[i].$('.booking-info-link.bold')).getProperty('innerText')).jsonValue();
+
+    let description1 = await (await (await programs[i].$$('.booking-info-link'))[1].getProperty('innerText')).jsonValue();
+    let description2 = await (await (await programs[i].$$('.booking-info-link'))[2].getProperty('innerText')).jsonValue();
+    let description = `${description1} - ${description2}`
+
+    let data = { time, name, description}
+
+    if (data.name.toLowerCase().includes(programName)) {
+      const button = await programs[i].$('.col-4 .btn')
+      await button.click()
+      break
+    }
+  }
   await navigationPromise
+}
 
+async function confirmBooking() {
+  await page.waitForSelector('body > .container > form > p > .btn-success')
+  await page.click('body > .container > form > p > .btn-success')
+  await navigationPromise
 }
