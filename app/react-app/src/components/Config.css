@@ -1,0 +1,15 @@
+.data {
+  background-color: #581b98;
+  color: white;
+  border-radius: 5px;
+  padding-left: 3px;
+  padding-right: 3px;
+}
+h2 {
+  font-size: 2.3rem;
+  color:#e2467f;
+  margin: 3px;
+}
+p {
+  margin: 3px;
+}
