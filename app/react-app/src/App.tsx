@@ -1,11 +1,11 @@
 import './App.css';
-import Config from './components/Config';
+import Days from './components/Days';
 
 function App() {
   return (
     <div className="App">
       <h1 style={{color:'#9c1de7'}}>Booking</h1>
-      <Config day='Monday'></Config>
+      <Days></Days>
     </div>
   );
 }
