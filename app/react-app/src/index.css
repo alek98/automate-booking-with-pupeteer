@@ -1,0 +1,53 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400&display=swap');
+body {
+  margin: 0;
+font-family: 'Poppins', sans-serif;
+background-color: #fffdde;
+
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+button {
+  display: inline-block;
+  background: #f3558e;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  margin: 5px;
+  border-radius: 5px;
+  cursor: pointer;
+  text-decoration: none;
+  font-size: 1rem;
+  font-family: inherit;
+  box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+}
+
+button:focus {
+  outline: none;
+}
+
+button:active {
+  transform: scale(0.98);  
+}
+
+button:disabled {
+  filter: brightness(85%);
+  cursor: auto;
+}
+
+select, input {
+  outline: 0;
+  box-shadow: none;
+  border: 1px solid #4b2a6dfa !important;
+  /* background-color:#7953a0fa; */
+  /* color: white; */
+  width: 12rem;
+  height: 2.5em;
+  overflow: hidden;
+  border-radius: .3em;
+  margin-right: 15px;
+}
