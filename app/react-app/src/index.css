@@ -34,6 +34,11 @@ button:active {
   transform: scale(0.98);  
 }
 
+button:disabled {
+  filter: brightness(85%);
+  cursor: auto;
+}
+
 select, input {
   outline: 0;
   box-shadow: none;
