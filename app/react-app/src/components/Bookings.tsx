@@ -12,6 +12,7 @@ const Bookings = () => {
   const onSave = (booking: Booking) => {
     console.log('saving', booking);
     setBookings([...bookings, booking])
+    toggleNewBooking()
   }
 
   return (
