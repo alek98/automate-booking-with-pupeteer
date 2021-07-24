@@ -14,8 +14,4 @@ const Days = () => {
   )
 }
 
-const buttonStyle = {
-
-}
-
 export default Days

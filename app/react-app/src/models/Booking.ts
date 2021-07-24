@@ -1,4 +1,4 @@
-export interface Booking {
+export interface BookingSchedule {
   day: string,
   name: string,
   location: string,

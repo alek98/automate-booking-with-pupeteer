@@ -1,5 +1,5 @@
 import { FC, useState } from "react"
-import { Booking } from "../models/Booking"
+import { BookingSchedule } from "../models/Booking"
 
 const NewBooking: FC<Props> = (props) => {
   const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursady', 'Friday', 'Saturday', 'Sunday']
@@ -12,7 +12,7 @@ const NewBooking: FC<Props> = (props) => {
   const [showError, setShowError] = useState(false)
 
   const onSubmit = () => {
-    const newBooking: Booking = { day, name, location, startTime, endTime }
+    const newBooking: BookingSchedule = { day, name, location, startTime, endTime }
     props.onSave(newBooking);
   }
 
@@ -90,6 +90,6 @@ const NewBooking: FC<Props> = (props) => {
 
 interface Props {
   onCancel: () => void,
-  onSave: (booking: Booking) => void,
+  onSave: (bookingSchedule: BookingSchedule) => void,
 }
 export default NewBooking
