@@ -1,5 +1,6 @@
-import firebase from "firebase/app";
+import firebase from 'firebase/app';
 import 'firebase/firestore'
+import 'firebase/auth'
 
 const firebaseConfig = {
   apiKey: "AIzaSyAorDERlI_-xfFdUaNjUiZof9YuGQPaZwI",
@@ -11,12 +12,14 @@ const firebaseConfig = {
 };
 
 const firebaseApp = firebase.initializeApp(firebaseConfig)
+const db = firebaseApp.firestore()
+const auth = firebase.auth()
 
-const db = firebaseApp.firestore();
 if(window.location.hostname === 'localhost') {
   console.log('using localhost')
-  db.useEmulator('localhost', 8080);
+  db.useEmulator('localhost', 8080)
+  auth.useEmulator("http://localhost:9099")
 } else {
   console.log('not using localhost')
 }
-export {db}
+export { db, auth}
