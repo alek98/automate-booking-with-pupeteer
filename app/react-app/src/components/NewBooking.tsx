@@ -10,7 +10,6 @@ const NewBooking: FC<Props> = (props) => {
   const [endTime, setEndTime] = useState<string>('')
 
   const [showError, setShowError] = useState(false)
-  const toggleFormError = () => setShowError(!showError)
 
   const onSubmit = () => {
     const newBooking: Booking = { day, name, location, startTime, endTime }

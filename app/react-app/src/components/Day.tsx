@@ -4,7 +4,7 @@ import './Day.css'
 const Config: FC<Props> = ({ day }) => {
   return (
     <div>
-      <h2>{day}</h2>
+      <h2 className='day'>{day}</h2>
       <div className='data'>
         <p style={{ fontSize: '1.7rem' }}>Bodypump</p>
         <p>

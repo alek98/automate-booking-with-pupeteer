@@ -17,6 +17,8 @@ const Bookings = () => {
 
   return (
     <div>
+      <h2 style={{textAlign:'center', color:'#5c1c9e'}}>Schedule</h2>
+
       {showForm ? 
       <NewBooking onCancel={toggleNewBooking} onSave={onSave} /> :
         <button

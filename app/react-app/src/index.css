@@ -10,6 +10,13 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+h1 {
+  margin: 0.7rem;
+}
+h2 {
+  font-size: 2.3rem;
+  margin: 1rem;
+}
 
 button {
   display: inline-block;
