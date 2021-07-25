@@ -19,14 +19,14 @@ const Bookings = () => {
 
   const onSave = async (newBookingSchedule: BookingSchedule) => {
     try {
-      console.log('saving', newBookingSchedule);
       await bookingSchedulesRef.add(newBookingSchedule)
       openSnackBar('successfully added.')
     } catch (error) {
       console.log(error)
       openSnackBar('problem while adding.')
+    } finally {
+      toggleNewBooking()
     }
-    toggleNewBooking()
   }
 
   return (

@@ -16,10 +16,7 @@ const db = firebaseApp.firestore()
 const auth = firebase.auth()
 
 if(window.location.hostname === 'localhost') {
-  console.log('using localhost')
   db.useEmulator('localhost', 8080)
   auth.useEmulator("http://localhost:9099")
-} else {
-  console.log('not using localhost')
-}
+} 
 export { db, auth}

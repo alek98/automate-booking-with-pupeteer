@@ -18,11 +18,11 @@ export function useSnackBar() {
   const [msg, setMsg] = useState<string>()
 
   useEffect(() => {
-    console.log('use effect')
+    // console.log('use effect')
     if (isActive == true) {
-      console.log('setting snackbar show')
+      // console.log('setting snackbar show')
       setTimeout(() => {
-        console.log('setting snackbar')
+        // console.log('setting snackbar')
         setIsActive(false);
       }, 4000);
     }
