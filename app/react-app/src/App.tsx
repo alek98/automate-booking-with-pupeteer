@@ -1,12 +1,11 @@
 import './App.css';
 import Bookings from './components/Bookings';
-import { auth, db } from './firebase/Config';
+import { auth } from './firebase/Config';
 import { useAuthState } from 'react-firebase-hooks/auth'
 import Login from './components/Login';
 import Logout from './components/Logout';
 function App() {
   const [user] = useAuthState(auth)
-  // db.doc('users/alek').set({name: 'alek', surname: 'vuj'})
 
   return (
     <div className="App">

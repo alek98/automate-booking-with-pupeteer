@@ -1,6 +1,6 @@
-import { createRef, useState } from "react"
+import { useState } from "react"
 import { db } from "../firebase/Config"
-import { BookingSchedule } from "../models/Booking"
+import { BookingSchedule } from "../models/BookingSchedule"
 import Days from "./Days"
 import NewBooking from "./NewBooking"
 import { useCollectionData } from 'react-firebase-hooks/firestore'
@@ -9,8 +9,7 @@ import Snackbar, { useSnackBar } from "./Snackbar"
 const Bookings = () => {
 
   const bookingSchedulesRef = db.collection('bookingSchedules')
-  const [bookingSchedules] = useCollectionData<BookingSchedule>(bookingSchedulesRef)
-
+  const [bookingSchedules] = useCollectionData<BookingSchedule>(bookingSchedulesRef, {idField: 'id'})
 
   const [showForm, setShowForm] = useState(false)
   const toggleNewBooking = () => setShowForm(!showForm)
@@ -41,7 +40,7 @@ const Bookings = () => {
           style={{ fontSize: '1.3rem', textAlign: 'center', margin: 'auto', display: 'block' }}>
           New booking
         </button>}
-      <Days />
+      <Days bookingSchedules={bookingSchedules}/>
     </div>
   )
 }

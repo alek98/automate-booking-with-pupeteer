@@ -1,17 +1,22 @@
+import { FC } from 'react';
 import Day from './Day';
+import { BookingSchedule } from '../models/BookingSchedule';
+import { Data } from 'react-firebase-hooks/firestore/dist/firestore/types';
 
-const Days = () => {
+
+const Days:FC<Props> = ({bookingSchedules}) => {
   const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursady', 'Friday', 'Saturday', 'Sunday']
   return (
-    <div>
-
-      <div>
+    <div style={{marginBottom: '5rem'}}>
         {days.map(day =>
-          <Day key={day} day={day}></Day>
+          <Day key={day} day={day} bookingSchedules={bookingSchedules} ></Day>
         )}
-      </div>
     </div>
   )
+}
+
+interface Props {
+  bookingSchedules: Data<BookingSchedule>[] | undefined,
 }
 
 export default Days

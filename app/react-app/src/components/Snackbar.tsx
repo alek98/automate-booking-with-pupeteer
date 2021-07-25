@@ -19,7 +19,7 @@ export function useSnackBar() {
 
   useEffect(() => {
     // console.log('use effect')
-    if (isActive == true) {
+    if (isActive === true) {
       // console.log('setting snackbar show')
       setTimeout(() => {
         // console.log('setting snackbar')

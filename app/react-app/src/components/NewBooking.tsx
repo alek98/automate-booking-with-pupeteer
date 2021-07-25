@@ -1,5 +1,5 @@
 import { FC, useState } from "react"
-import { BookingSchedule } from "../models/Booking"
+import { BookingSchedule } from "../models/BookingSchedule"
 
 const NewBooking: FC<Props> = (props) => {
   const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursady', 'Friday', 'Saturday', 'Sunday']
