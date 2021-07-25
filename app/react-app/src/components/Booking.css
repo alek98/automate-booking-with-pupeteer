@@ -6,6 +6,7 @@
   padding-right: 3px;
   width: 90%;
   margin:auto;
+  margin-top: .5rem;
 }
 .day {
   font-size: 1.6rem;
@@ -20,4 +21,22 @@ p {
 .material-icons-outlined {
   vertical-align: top;
   padding-right: 3px;
+}
+.delete-btn {
+  border-radius: 30%;
+  padding: 0.3rem 0.6rem;
+  margin: 0.2rem;
+  color: #f3556a;
+  float: right;
+  background: transparent;
+  box-shadow: none;
+}
+.confirm-btn {
+  float: right;
+  background: transparent;
+  color: rgb(243, 85, 106);
+}
+.cancel-btn {
+  float: right;
+  background: transparent;
 }
