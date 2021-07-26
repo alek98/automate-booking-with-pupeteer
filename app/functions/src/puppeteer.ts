@@ -4,7 +4,7 @@ import * as puppeteer from 'puppeteer'
 import { localConfig } from './config'
 
 let config: any;
-if (functions.config()?.length) config = functions.config()
+if (Object.keys(functions.config()).length) config = functions.config()
 else config = localConfig
 let service = config.service
 
