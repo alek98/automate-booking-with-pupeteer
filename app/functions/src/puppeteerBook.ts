@@ -91,12 +91,22 @@ async function login() {
 }
 
 async function chooseLocation() {
-  await page.waitForSelector('.container > form > .row > .form-group:nth-child(3) > .form-control')
-  await page.click('.container > form > .row > .form-group:nth-child(3) > .form-control')
-  //Höllviken value 1
-  //SKanör value 2
-  await page.select('.container > form > .row > .form-group:nth-child(3) > .form-control', '2')
+  await page.waitForSelector('select[name="PLATSID"]')
+  await page.click('select[name="PLATSID"]')
+  const select = await page.$('select[name="PLATSID"]')
+  const locations = await select?.$$('option')
 
+  if (!locations) throw new Error('not found: location html select element.')
+
+  for (let i = 0; i < locations.length; i++) {
+    const optionName: string | undefined = await (await locations[i].getProperty('innerText'))?.jsonValue()
+    const optionValue: string | undefined = await (await locations[i].getProperty('value'))?.jsonValue()
+    if (!optionValue) continue;
+    if (optionName?.toLowerCase() === bookingSchedule.location.toLowerCase()) {
+      await page.select('select[name="PLATSID"]', optionValue)
+      break
+    }
+  }
   await navigationPromise
 }
 

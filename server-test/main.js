@@ -7,7 +7,7 @@ main()
 
 async function main() {
   const bookFunction = book;
-  await tryToBook(bookFunction, endTimeInSeconds=10);
+  await tryToBook(bookFunction, endTimeInSeconds = 10);
 }
 
 
@@ -27,7 +27,7 @@ async function _tryToBook(myFunction, endTime) {
     let currentTime = new Date().getTime();
 
     let timeout = setTimeout(async () => {
-      
+
       // check if time is up
       if (currentTime >= endTime) clearTimeout(timeout)
 
@@ -35,7 +35,7 @@ async function _tryToBook(myFunction, endTime) {
       else await _tryToBook(myFunction, endTime)
     }, 2000);
   }
-  finally{
+  finally {
     console.log('closing browser');
     await browser.close()
   }
@@ -83,8 +83,18 @@ async function chooseLocation() {
   await page.click('.container > form > .row > .form-group:nth-child(3) > .form-control')
   //Höllviken value 1
   //SKanör value 2
-  await page.select('.container > form > .row > .form-group:nth-child(3) > .form-control', '2')
+  await page.waitForSelector('select[name="PLATSID"]')
+  const select = await page.$('select[name="PLATSID"]')
+  const locations = await select.$$('option')
 
+  for (let i = 0; i < locations.length; i++) {
+    const optionName = await (await locations[i].getProperty('innerText')).jsonValue()
+    const optionValue = await (await locations[i].getProperty('value')).jsonValue()
+    if (optionName === 'Skanör') {
+      await page.select('select[name="PLATSID"]', optionValue)
+      break
+    }
+  }
   await navigationPromise
 }
 
@@ -107,7 +117,7 @@ async function chooseDate() {
 }
 
 async function chooseProgram() {
-  const programName = config.env.PROGRAM 
+  const programName = config.env.PROGRAM
   await page.waitForSelector('.table-responsive .card-body .row')
   let programs = await page.$$('.table-responsive .card-body .row')
 
