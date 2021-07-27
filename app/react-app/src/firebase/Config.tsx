@@ -3,12 +3,12 @@ import 'firebase/firestore'
 import 'firebase/auth'
 
 const firebaseConfig = {
-  apiKey: "AIzaSyAorDERlI_-xfFdUaNjUiZof9YuGQPaZwI",
-  authDomain: "automate-booking-with-pupeteer.firebaseapp.com",
-  projectId: "automate-booking-with-pupeteer",
-  storageBucket: "automate-booking-with-pupeteer.appspot.com",
-  messagingSenderId: "763712958110",
-  appId: "1:763712958110:web:84068eefbe4f0c283f958f"
+  apiKey: "AIzaSyD5sDArpz53W9HDNU6VUvCmqftJUzyd9eY",
+  authDomain: "book-with-puppeteer.firebaseapp.com",
+  projectId: "book-with-puppeteer",
+  storageBucket: "book-with-puppeteer.appspot.com",
+  messagingSenderId: "100105684580",
+  appId: "1:100105684580:web:82c0accd4e6dc24e5dc171"
 };
 
 const firebaseApp = firebase.initializeApp(firebaseConfig)

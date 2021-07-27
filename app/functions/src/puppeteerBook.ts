@@ -117,6 +117,6 @@ async function chooseProgram() {
 async function confirmBooking() {
   await page.waitForSelector('body > .container > form > p > .btn-success');
   // TODO: UNCOMMENT FOR PRODUCTION
-  // await page.click('body > .container > form > p > .btn-success')
+  await page.click('body > .container > form > p > .btn-success')
   await navigationPromise;
 }

@@ -24,11 +24,10 @@ export const createBookingWithPuppeteer = functions
 export const scheduledBooking = functions
     .runWith({memory: '512MB', timeoutSeconds: 90})
     .pubsub
-    .schedule('* * * * *')
+    .schedule('0 0 * * *')
     .timeZone('Europe/Belgrade')
     .onRun(async () => {
       await bookToday();
-      console.log('cron job working');
       return null;
     });
 
