@@ -25,8 +25,8 @@ export async function createBooking(myService: Service, myBookingSchedule: Booki
 }
 
 async function book() {
-  browser = await launch({ headless: false, slowMo: 30 })
-  // browser = await puppeteer.launch({ headless: true })
+  // browser = await launch({ headless: false, slowMo: 30 })
+  browser = await launch({ headless: true })
   page = await browser.newPage()
   navigationPromise = page.waitForNavigation()
   await init()
@@ -110,7 +110,6 @@ async function chooseProgram() {
       // second, if time is right, check is program name is right
       const name: string | undefined = await (await (await program.$('.booking-info-link.bold'))?.getProperty('innerText'))?.jsonValue();
       if (name?.toLowerCase().includes(bookingSchedule.name.toLowerCase())) {
-        console.log(`found ${name}`)
         const button = await program.$('.col-4 .btn')
         await button?.click()
         break
