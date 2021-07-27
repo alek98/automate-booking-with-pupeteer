@@ -1,5 +1,5 @@
 export interface Service {
-  "password": string,
-  "person": string,
-  "website": string
+  'password': string,
+  'person': string,
+  'website': string
 }
