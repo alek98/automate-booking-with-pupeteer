@@ -33,7 +33,7 @@ async function _tryToBook(myFunction: () => Promise<void>, endTime: number) {
     await myFunction();
     // console.log('done successfully')
   } catch (error) {
-    // console.log('failed. Trying again.')
+    console.log('failed. Trying again.')
     console.log(error);
 
     let currentTime = new Date().getTime();
@@ -54,7 +54,7 @@ async function _tryToBook(myFunction: () => Promise<void>, endTime: number) {
 }
 
 async function book() {
-  browser = await launch({ headless: false, slowMo: 100 })
+  browser = await launch({ headless: false, slowMo: 30 })
   // browser = await puppeteer.launch({ headless: true })
   page = await browser.newPage()
   navigationPromise = page.waitForNavigation()
@@ -63,8 +63,7 @@ async function book() {
   await chooseLocation()
   await chooseDate()
   await chooseProgram()
-  // TODO: uncomment function for production
-  // await confirmBooking()
+  await confirmBooking()
 }
 
 async function init() {
@@ -132,31 +131,27 @@ async function chooseProgram() {
   await page.waitForSelector('.table-responsive .card-body .row')
   let programs = await page.$$('.table-responsive .card-body .row')
 
-  for (let i = 0; i < programs.length; i++) {
+  for (const program of programs) {
 
-    const time: string | undefined = await (await (await programs[i].$('.nobr'))?.getProperty('innerHTML'))?.jsonValue()
-
-    const name: string | undefined = await (await (await programs[i].$('.booking-info-link.bold'))?.getProperty('innerText'))?.jsonValue();
-
-    const today = new Date()
-    const data = { time, name, today }
-
-    // find program by name, time & day of the week
-    if (
-      data.name?.toLowerCase().includes(bookingSchedule.name) &&
-      data.time === `${bookingSchedule.startTime} - ${bookingSchedule.endTime}` &&
-      data.today.toLocaleString('us', { weekday: 'long' }) === bookingSchedule.day
-    ) {
-      const button = await programs[i].$('.col-4 .btn')
-      await button?.click()
-      break
+    const time: string | undefined = await (await (await program.$('.nobr'))?.getProperty('innerHTML'))?.jsonValue()
+    // first, check if time is right
+    if (time === `${bookingSchedule.startTime} - ${bookingSchedule.endTime}`) {
+      // second, if time is right, check is program name is right
+      const name: string | undefined = await (await (await program.$('.booking-info-link.bold'))?.getProperty('innerText'))?.jsonValue();
+      if (name?.toLowerCase().includes(bookingSchedule.name.toLowerCase())) {
+        console.log(`found ${name}`)
+        const button = await program.$('.col-4 .btn')
+        await button?.click()
+        break
+      }
     }
   }
   await navigationPromise
 }
 
-// async function confirmBooking() {
-//   await page.waitForSelector('body > .container > form > p > .btn-success')
-//   await page.click('body > .container > form > p > .btn-success')
-//   await navigationPromise
-// }
+  async function confirmBooking() {
+    await page.waitForSelector('body > .container > form > p > .btn-success')
+    // TODO: UNCOMMENT FOR PRODUCTION
+    // await page.click('body > .container > form > p > .btn-success')
+    await navigationPromise
+  }

@@ -1,5 +1,5 @@
 import * as functions from 'firebase-functions'
-// import * as admin from 'firebase-admin'
+import * as admin from 'firebase-admin'
 import * as puppeteer from 'puppeteer'
 import { localConfig } from './config'
 import { BookingSchedule } from './models/BookingSchedule';
@@ -11,23 +11,43 @@ else config = localConfig
 let service = config.service
 
 export const createBookingWithPuppeteer = functions
-  .runWith({ memory: '1GB', timeoutSeconds: 60 })
+  .runWith({ memory: '512MB', timeoutSeconds: 90 })
   .https.onRequest(async (request, response) => {
 
-    console.log(service.website)
-    const tempSchedule: BookingSchedule = {
-      day: "Monday",
-      endTime: "19:30",
-      location: "Skanör",
-      name: "BODYCOMBAT",
-      startTime: "18:30",
+    const today = new Date().toLocaleString('en-us', { timeZone: 'Europe/Belgrade', weekday: 'long' })
+    const bookingSchedulesSnapshot = await admin
+      .firestore()
+      .collection('bookingSchedules')
+      .where('day', '==', today)
+      .get()
+
+    const bookingSchedules = bookingSchedulesSnapshot.docs.map(
+      bookingSchedule => bookingSchedule.data() as BookingSchedule)
+
+    for(const schedule of bookingSchedules) {
+      await createBooking(service, schedule)
+      await admin.firestore().collection('bookingHistory').add({
+        ...schedule,
+        bookedAt: admin.firestore.FieldValue.serverTimestamp()
+      })
     }
-    createBooking(service,tempSchedule)
+    // TODO: LOAD ACTUAL BOOKING SCHEDULE
+    // TODO: ADD CRON JOB
+    console.log('done')
     response.send('done')
   });
 
+export const scheduledBooking = functions.pubsub
+  .schedule('* * * * *')
+  .timeZone('Europe/Belgrade')
+  .onRun((context) => {
+    console.log('cron job working')
+    return null;
+  })
 
-  export const temp = functions.runWith({ memory: '1GB', timeoutSeconds: 60 })
+
+
+export const temp = functions.runWith({ memory: '1GB', timeoutSeconds: 60 })
   .https.onRequest(async (request, response) => {
     // let browser = await puppeteer.launch({ headless: true, args: ['--no-sandbox', '--disable-setuid-sandbox'] })
     let browser = await puppeteer.launch({ headless: false, slowMo: 50 })
