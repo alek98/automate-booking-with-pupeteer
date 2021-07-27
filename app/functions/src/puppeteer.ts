@@ -25,11 +25,15 @@ export const createBookingWithPuppeteer = functions
       bookingSchedule => bookingSchedule.data() as BookingSchedule)
 
     for(const schedule of bookingSchedules) {
+      try {
       await createBooking(service, schedule)
       await admin.firestore().collection('bookingHistory').add({
         ...schedule,
         bookedAt: admin.firestore.FieldValue.serverTimestamp()
-      })
+      })     
+      } catch (error) {
+        console.log('error cought')
+      }
     }
     // TODO: LOAD ACTUAL BOOKING SCHEDULE
     // TODO: ADD CRON JOB

@@ -11,44 +11,15 @@ let bookingSchedule: BookingSchedule;
 export async function createBooking(myService: Service, myBookingSchedule: BookingSchedule) {
   service = myService;
   bookingSchedule = myBookingSchedule;
-  const bookFunction = book;
-  await tryToBook(bookFunction, 20);
-}
-
-/**
- * 
- * @param myFunction function to execute
- * @param endTimeInSeconds how much time should function run until it's terminated
- * 
- * This function will try to make a booking depending on schedule from firestore db.
- * If function fails, it will try again for a specified amout of time in seconds.
- */
-async function tryToBook(myFunction: () => Promise<void>, endTimeInSeconds: number) {
-  const endTime = new Date().getTime() + endTimeInSeconds * 1000
-  await _tryToBook(myFunction, endTime);
-}
-
-async function _tryToBook(myFunction: () => Promise<void>, endTime: number) {
   try {
-    await myFunction();
-    // console.log('done successfully')
+    await book();
+    return Promise.resolve()    
   } catch (error) {
-    console.log('failed. Trying again.')
-    console.log(error);
-
-    let currentTime = new Date().getTime();
-
-    let timeout = setTimeout(async () => {
-
-      // check if time is up
-      if (currentTime >= endTime) clearTimeout(timeout)
-
-      // if time is not up & function failed, call recursive function
-      else await _tryToBook(myFunction, endTime)
-    }, 2000);
+    console.log('failed')
+    console.log(error)
+    return Promise.reject()
   }
   finally {
-    // console.log('closing browser');
     await browser.close()
   }
 }
