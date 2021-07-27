@@ -24,8 +24,8 @@ export async function createBooking(myService: Service, myBookingSchedule: Booki
 }
 
 async function book() {
-  browser = await launch({ headless: false, slowMo: 30 })
-  // browser = await launch({ headless: true });
+  // browser = await launch({ headless: false, slowMo: 30 })
+  browser = await launch({ headless: true });
   page = await browser.newPage();
   navigationPromise = page.waitForNavigation();
   await init();

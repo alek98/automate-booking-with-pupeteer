@@ -4,6 +4,7 @@ import { auth } from './firebase/Config';
 import { useAuthState } from 'react-firebase-hooks/auth'
 import Login from './components/Login';
 import Logout from './components/Logout';
+import History from './components/History';
 function App() {
   const [user] = useAuthState(auth)
 
@@ -22,7 +23,10 @@ function App() {
       <h1 style={{ color: '#9c1de7' }}>Booking</h1>
 
       {user ?
+      <div>
         <Bookings />
+        <History />
+      </div>
         :
         <Login />}
     </div>

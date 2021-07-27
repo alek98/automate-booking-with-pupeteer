@@ -49,12 +49,12 @@ const Booking: FC<{ bookingSchedule: BookingSchedule }> = ({ bookingSchedule }) 
       </div>
 
       <p style={{ display: 'inline-block' }}>
-        <span className='material-icons-outlined'>place</span>
-        {bookingSchedule.location}
-      </p>
-      <p style={{ display: 'inline-block' }}>
         <span className='material-icons-outlined'>schedule</span>
         {bookingSchedule.startTime}-{bookingSchedule.endTime}
+      </p>
+      <p style={{ display: 'inline-block' }}>
+        <span className='material-icons-outlined'>place</span>
+        {bookingSchedule.location}
       </p>
     </div>
   )

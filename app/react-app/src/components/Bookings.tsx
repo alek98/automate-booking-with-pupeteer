@@ -38,7 +38,7 @@ const Bookings = () => {
         <button
           onClick={toggleNewBooking}
           style={{ fontSize: '1.3rem', textAlign: 'center', margin: 'auto', display: 'block' }}>
-          New booking
+          New Schedule
         </button>}
       <Days bookingSchedules={bookingSchedules}/>
     </div>
