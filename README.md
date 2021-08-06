@@ -13,4 +13,4 @@ Firebase schedule function will run each day at midnight (cron job) and it will 
 ## Initialization
 - Position into app folder with `cd app`. Initialize firebase with `firebase init` command
 - Create react app with `npx create-react-app react-app --template typescript`
-- Install packages for react&firebase with `npm install firebase react-firebase-hooks`
+- Install packages for react&firebase with `npm install firebase react-firebase-hooks`.
